@@ -2,15 +2,22 @@ name: Build redacted varchar array transformer WASM
 
 on:
   push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+    # Trigger on tags that look like versions
+    tags:
+      - 'v*.*.*'
+
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to release (e.g., v0.1.0)'
+        required: true
+        default: 'v0.1.0'
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
+    #    permissions:
+    #      contents: write
 
     steps:
       - name: Checkout code
@@ -40,36 +47,20 @@ jobs:
           name: redacted-varchar-array-transformer
           path: release/redacted-varchar-array-transformer.wasm
 
-#      - name: Create Release
-#        if: github.even_name == 'push' && github.ref == 'refs/heads/main'
-#        id: create_release
-#        uses: actions/create-release@v1
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#        with:
-#          tag_name: release-${{ github.run_number }}
-#          release_name: Release ${{ github.run_number }}
-#          draft: false
-#          prerelease: false
-#
-#      - name: Upload release asset
-#        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-#        uses: actions/upload-release-asset@v1
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#        with:
-#          upload_url: ${{ steps.create_release.outputs.upload_url }}
-#          asset_path: release/redacted-varchar-array-transformer.wasm
-#          asset_name: redacted-varchar-array-transformer.wasm
-#          asset_content_type: application/wasm
+      - name: Get release version
+        id: get_version
+        run: |
+          if [ "${{ github.event_name }}" = "push" ]; then
+            echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+          else
+            echo "VERSION=${{ github.event.inputs.version }}" >> $GITHUB_OUTPUT
+          fi
 
       - name: Create release
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        id: create_release
         uses: softprops/action-gh-release@v2
         with:
           files: release/redacted-varchar-array-transformer.wasm
-          tag_name: release-${{ github.run_number }}
-          name: Release ${{ github.run_number }}
+          tag_name: ${{ steps.get_version.outputs.VERSION }}
+          name: Release ${{ steps.get_version.outputs.VERSION }}
           draft: false
           prerelease: false
