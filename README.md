@@ -8,7 +8,7 @@ updated method (primarily the target):
 
 - `rustup target add wasm32-wasip1`
 - `cargo build --release --target wasm32-wasip1`
-- update your <CONFIG>.y(a)ml to reflect th path:
+- update your \<CONFIG\>.y(a)ml to reflect th path:
     ```yaml
     source:
       # ...
