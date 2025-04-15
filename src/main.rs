@@ -1,11 +1,11 @@
 use std::io::Read;
 
-fn main() {
-    // Constants used for transformation
-    const CHAR_COUNT: usize = 3;
-    const FILL_WIDTH: usize = 10;
-    const CHAR_MASK: &str = "*";
+// Constants used for transformation
+const CHAR_COUNT: usize = 3;
+const FILL_WIDTH: usize = 10;
+const CHAR_MASK: &str = "*";
 
+fn main() {
     // Read input value from stdin
     let mut input: String = String::new();
     std::io::stdin().read_to_string(&mut input).unwrap();
@@ -29,6 +29,6 @@ fn main() {
         })
         .collect();
 
-    // Write transformed value to stdout
+    // Write transformed value to stdout (simply print)
     println!("{{{}}}", transformed_values.join(","));
 }
