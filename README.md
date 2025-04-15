@@ -1,6 +1,7 @@
 # replibyte-redacted-postgres-varchar-array-transformer
 
-This is a custom RedactedTransformer for [RepliByte], enabling it on an Array field.
+This is a custom RedactedTransformer for [RepliByte], enabling it on a PostgreSQL Varchar Array field (MySQL and MongoDB
+untested).
 
 In order to compile and use this transformer, you can follow along with [these instructions], but this is a slightly
 updated method (primarily the target):
